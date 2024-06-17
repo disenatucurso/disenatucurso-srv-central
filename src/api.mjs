@@ -115,6 +115,10 @@ app.post('/nuevaIncidencia', seguridad.autentico, async(req, res, next) => {
     try{
         const { titulo, descripcion,categoria } = req.body;
         let resultado = await database.newIncidencia(req.user.username,titulo, descripcion,categoria);
+        await util.enviarEmail('Nueva incidencia reportada'
+            , `<p>Usuario:${req.user.username}</p><p>Id incidencia:${resultado}</p><p>Titulo: ${titulo}</p><p>Descripcion: ${descripcion}</p><p>Categoria: ${categoria}</p>`
+            , 'disenatucurso@gmail.com'
+        );
         res.json({idIncidencia:resultado});
     }
     catch(error){
