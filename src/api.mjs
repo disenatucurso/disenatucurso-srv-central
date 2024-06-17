@@ -150,7 +150,7 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
         //Actualizo objeto Curso
         util.actualizarMetadataCurso(objCurso,respNewCurso.id,respNewCurso.version,username);
         //Actualizo nombre de usuario - OPCIONAL
-        database.updateUserNombre(objCurso.autor,username);
+        database.updateUserNombre(objCurso.versiones[objCurso.versiones.length - 1].autor,username);
         //Grabo objeto Curso en FileSystem
         let rutaFS=util.guardarArchivoCurso(objCurso);
         //Actualizo rutaFS en BDAT
