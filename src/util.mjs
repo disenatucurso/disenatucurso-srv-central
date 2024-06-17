@@ -164,7 +164,6 @@ function actualizarMetadataCurso(objCurso,idCurso,version,username){
                 }
             );
         }
-        return ultAutor.nombre;
     }
     catch(error){
         throw error;

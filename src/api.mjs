@@ -148,9 +148,9 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
             }
         }
         //Actualizo objeto Curso
-        let nombreAutor = util.actualizarMetadataCurso(objCurso,respNewCurso.id,respNewCurso.version,username);
+        util.actualizarMetadataCurso(objCurso,respNewCurso.id,respNewCurso.version,username);
         //Actualizo nombre de usuario - OPCIONAL
-        database.updateUserNombre(nombreAutor,username);
+        database.updateUserNombre(objCurso.autor,username);
         //Grabo objeto Curso en FileSystem
         let rutaFS=util.guardarArchivoCurso(objCurso);
         //Actualizo rutaFS en BDAT
