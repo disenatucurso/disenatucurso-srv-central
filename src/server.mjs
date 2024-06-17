@@ -10,7 +10,7 @@ const app = express();
 // Configurar CORS antes de la validación de OpenAPI
 app.use(cors({
   // origin: 'http://localhost:4200', // Permitir solicitudes solo desde este origen
-  methods: ['GET', 'POST'], // Permitir los métodos GET y POST
+  methods: ['GET', 'POST','OPTIONS'], // Permitir los métodos GET y POST
   allowedHeaders: ['Content-Type', 'Authorization'], // Permitir los encabezados Content-Type y Authorization
 }));
 

@@ -74,7 +74,7 @@ async function validarMetadataCurso(objCurso,username){
                 versionCurso:null
             }
         }
-        else {
+        else if(objCurso.institucion === constantes.SERVER_URL){
             //Obtengo el curso con idCurso=idGlobal para conocer su creador
             let resCurso = await database.getCurso(objCurso.idGlobal);
             if(resCurso.username === username){
@@ -91,6 +91,12 @@ async function validarMetadataCurso(objCurso,username){
                     escenario:"NUEVO_CURSO_YAEXISTE",
                     versionCurso:resCurso.version
                 }
+            }
+        }
+        else{
+            return {
+                escenario:"NUEVO_CURSO",
+                versionCurso:null
             }
         }
     }

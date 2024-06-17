@@ -134,7 +134,11 @@ async function newCurso(nombrecurso,username){
         const values = [nombrecurso,username];
         const result = await client.query(query, values); // Ejecuta la consulta con los valores proporcionados
         if (result.rows.length === 1) {
-            return result.rows[0];
+            return {
+                id:result.rows[0].id,
+                version:result.rows[0].version,
+                nombreCurso:result.rows[0].nombrecurso
+            }
         }
         throw new Error('RowCount incorrecto');
     }
