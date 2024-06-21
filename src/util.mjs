@@ -112,7 +112,7 @@ function guardarArchivoCurso(objCurso){
         // Convertir el objeto JavaScript a una cadena JSON
         const jsonString = JSON.stringify(objCurso, null, 2);
         // Escribir la cadena JSON en un archivo de forma sincrónica
-        fs.writeFileSync(filePath, jsonString);
+        fs.writeFileSync(filePath, jsonString, 'utf-8');
         return filePath;
     }
     catch (error) {

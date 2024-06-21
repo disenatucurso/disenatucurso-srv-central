@@ -7,7 +7,7 @@ import util from './util.mjs';
 
 const app = express();
 // Middleware para analizar el cuerpo de las solicitudes en formato JSON
-app.use(express.json());
+app.use(express.json({charset: 'utf-8' }));
 
 //URLS PÚBLICAS
 //Login
@@ -133,13 +133,13 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
         const binaryData = Buffer.from(base64, 'base64');
         // Convertir los datos binarios a objeto JavaScript si representan un JSON serializado
         const objCurso = JSON.parse(binaryData.toString('utf8'));
-
         let username=req.user.username;
         let respValidacion = await util.validarMetadataCurso(objCurso,username);
         let escenario=respValidacion.escenario;
         let respNewCurso = null;
         if(escenario=='NUEVO_CURSO' || escenario=='NUEVO_CURSO_YAEXISTE'){
             //Creo registro en BDAT
+            console.log(objCurso)
             respNewCurso = await database.newCurso(objCurso.nombreCurso,username);
         }
         else{
