@@ -13,11 +13,11 @@ function ENCRYPT_KEY() {
   }
   return valorAleatorio;
 }
-const SERVER_URL = "SERVER_URL";
-const NOMBRE_INSTITUCION = 'UdelaR Noreste';
+const SERVER_URL = "http://localhost:3000";
+const NOMBRE_INSTITUCION = 'SRV LocalHost';
 //En Windows, se quita la letra de unidad y :
 //En este caso mi ruta completa es "C:/Users/net..."
-const RUTA_CODIGO="/Users/netcheverry/Documents/GitHub/disenatucurso-servidor-central/src/"
+const RUTA_CODIGO="/Users/nesto/Documents/GitHub/disenatucurso-srv-central/src/"
 function RUTA_FS_CURSO(idCurso){
     if (rutaFSCursos === null) {
         // Get the current directory path
