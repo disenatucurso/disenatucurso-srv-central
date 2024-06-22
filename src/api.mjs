@@ -130,9 +130,10 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
     try{
         const { base64 } = req.body;
         // Decodificar la cadena base64 en datos binarios
-        const binaryData = Buffer.from(base64, 'base64');
-        // Convertir los datos binarios a objeto JavaScript si representan un JSON serializado
-        const objCurso = JSON.parse(binaryData.toString('utf8'));
+        const jsonString = Buffer.from(base64, 'base64').toString('utf8');
+        // Parsear la cadena JSON a un objeto JavaScript
+        const objCurso = JSON.parse(jsonString);
+
         let username=req.user.username;
         let respValidacion = await util.validarMetadataCurso(objCurso,username);
         let escenario=respValidacion.escenario;
@@ -160,7 +161,9 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
         //Actualizo rutaFS en BDAT
         let respUpdateCurso = await database.updateCurso(respNewCurso.id,rutaFS,respNewCurso.version,respNewCurso.nombreCurso);
         
-        const base64String = Buffer.from(JSON.stringify(objCurso, null, 2), 'utf8').toString('base64');
+        let stringCurso = JSON.stringify(objCurso, null, 2);
+        //const cursoB64 = btoa(stringCurso); // Convertir el JSON a base64
+        const base64String = btoa(unescape(encodeURIComponent(stringCurso)));
 
         res.json({
             idCurso:respUpdateCurso.id
