@@ -175,7 +175,8 @@ function leerArchivo(rutaFS) {
     try {
         // Leer el contenido del archivo JSON de forma asíncrona
         const jsonString = fs.readFileSync(rutaFS, 'utf8');
-        const base64String = Buffer.from(jsonString, 'utf8').toString('base64');
+        //const base64String = Buffer.from(jsonString, 'utf8').toString('base64');
+        const base64String = btoa(unescape(encodeURIComponent(jsonString)));
         // Devolver el b64
         return base64String;
     }
