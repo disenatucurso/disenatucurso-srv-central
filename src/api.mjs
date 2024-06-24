@@ -74,11 +74,11 @@ app.get('/bajarCurso', async (req, res, next) => {
     }
 });
 //Lista información de Cursos almacenados en Serv. Central
-app.get('/listarCursos', async (req, res, next) => {
+app.get('/listarCursos', seguridad.autentico, async (req, res, next) => {
     try{
         let vuelta = [];
         const criterio = req.query.criterio;
-        let listCursos = await database.listCursos(criterio);
+        let listCursos = await database.listCursos(criterio,req.user);
         for (let i = 0; i < listCursos.length; i++) {
             let curso = listCursos[i];
             //let base64String = util.leerArchivo(curso.ruta);
@@ -140,7 +140,7 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
         let respNewCurso = null;
         if(escenario=='NUEVO_CURSO' || escenario=='NUEVO_CURSO_YAEXISTE'){
             //Creo registro en BDAT
-            console.log(objCurso)
+            //console.log(objCurso)
             respNewCurso = await database.newCurso(objCurso.nombreCurso,username);
         }
         else{

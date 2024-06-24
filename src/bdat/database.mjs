@@ -175,20 +175,23 @@ async function getCurso(idCurso){
     }
 }
 
-async function listCursos(criterio) {
+async function listCursos(criterio,usuarioLogueado) {
     try {
         const values = [];
         let query = `SELECT c.id, c.version, c.nombrecurso, c.username, u.nombre as nombreusuario, c.ruta
                      FROM curso c
                      INNER JOIN usuario u ON u.username = c.username AND u.habilitado
                      WHERE c.ruta IS NOT NULL`;
-
         if (criterio && criterio !== null) {
             const upperCriterio = criterio.toUpperCase(); // Convertimos el criterio a mayúsculas
             query += " AND (UPPER(c.nombrecurso) LIKE $1 OR UPPER(u.nombre) LIKE $1 OR UPPER(u.username) LIKE $1)";
             values.push(addLikeString(upperCriterio)); // Añadimos el criterio en mayúsculas con el operador LIKE
         }
-
+        if(!usuarioLogueado.superadmin){
+            const paramIndex = values.length + 1;
+            query+=` AND c.username=$${paramIndex}`;
+            values.push(usuarioLogueado.username);
+        }
         query += ";";
         const result = await client.query(query, values);
         return result.rows;
