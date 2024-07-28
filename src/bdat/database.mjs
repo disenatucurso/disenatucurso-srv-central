@@ -1,5 +1,6 @@
 import util from '../util.mjs';
 import config from './config.mjs';
+import constantes from '../constantes.mjs';
 
 const client = config.conectarse();
 //CONSULTAS EN BASE DE DATOS
@@ -49,7 +50,17 @@ async function newUsuario(username,email){
             try{
                 //const response = 
                 await util.enviarEmail('Diseña Tu Curso - Nuevo usuario online'
-                    , `<p>Se le ha creado un usuario para el uso de los servicios en linea de Diseña Tu Curso - Servidor Central.</p><p>Usuario: ${username}</p><p>Password: ${password}</p></br><p>Este es un correo automático, no responda.</p>`
+                    , `<p>Se le ha creado un usuario para el uso de los servicios en linea de Diseña Tu Curso - Servidor Central de la institución ${constantes.NOMBRE_INSTITUCION} - URL: <b>${constantes.SERVER_URL}</b></p>
+                    <p>Usuario: ${username}</p>
+                    <p>Password: ${password}</p>
+                    <p>Para poder utilizar este servicio debe bajar la nueva versión del programa de los enlaces aquí debajo:</p>
+                    <p><b><a href="https://drive.google.com/file/d/1_TMpI53oQ__N2I7ngLvlqUtHRHtBWoo1/view?usp=sharing">Windows</a></b></p>
+                    <p><b><a href="https://drive.google.com/file/d/1svnv-biA7K6CqWw8zxWNLg62FlWUzo09/view?usp=sharing">Linux</a></b></p>
+                    <p><b><a href="https://drive.google.com/file/d/1Bi_92ylPd84ZhRSJ_Rmqb545ZeoDXLV2/view?usp=sharing">Mac</a></b></p>
+                    <p>Hemos creado un video tutorial para realizar la actualización que puede ver <b><a href="https://youtu.be/fjIunIuzjSQ">AQUÍ</a></b></p>
+                    <p>Adicionalmente, hemos actualizado los enlaces en el sitio de presentación del proyecto <b><a href="https://disenatucurso.noreste.udelar.edu.uy/">AQUÍ</a></b></p>
+                    </br>
+                    <p>Cualquier consulta o asistencia con este proceso, no dude en escribirnos a <a href="mailto:disenatucurso@gmail.com">disenatucurso@gmail.com</a></p>`
                     , email
                 );
                 //console.log(`Password enviado al email: ${email}`);
