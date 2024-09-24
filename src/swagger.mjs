@@ -353,6 +353,23 @@ const swaggerSpec = {
           },
         },
       },
+      '/api/validarToken': {
+        post: {
+          tags: ['Usuarios'],
+          summary: 'Valida JWT Token',
+          description: 'Devuelve HTTP 200 si está OK, HTTP 401 si no está OK.',
+          security: [
+            {
+                BearerAuth: []
+            },
+          ],
+          responses: {
+            '200': {
+              description: '200 OK Token valido',
+            }
+          },
+        },
+      },
       '/api/registrar': {
         post: {
           tags: ['Administrador'],
