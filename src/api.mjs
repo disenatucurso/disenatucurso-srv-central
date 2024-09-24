@@ -194,6 +194,14 @@ app.post('/cambiarPass', seguridad.autentico, async(req, res, next) => {
         next(error);
     }
 });
+app.post('/validarToken', seguridad.autentico, async(req, res, next) => {
+    try{
+        res.status(200).send();
+    }
+    catch(error){
+        next(error);
+    }
+});
 //URLS CON AUTORIZACIÓN: Solo usuario superadmin
 //Registra Usuarios en el sistema
 app.post('/registrar', seguridad.autorizo, async (req, res,next) => {
