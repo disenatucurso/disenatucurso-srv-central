@@ -135,10 +135,9 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
         const objCurso = JSON.parse(jsonString);
 
         let username=req.user.username;
-        let respValidacion = await util.validarMetadataCurso(objCurso,username);
-        let escenario=respValidacion.escenario;
+        let validacion = await util.validarMetadataCurso(objCurso,username);
         let respNewCurso = null;
-        if(escenario=='NUEVO_CURSO' || escenario=='NUEVO_CURSO_YAEXISTE'){
+        if(validacion.escenario=='NUEVO_CURSO' || validacion.escenario=='NUEVO_CURSO_YAEXISTE'){
             //Creo registro en BDAT
             //console.log(objCurso)
             respNewCurso = await database.newCurso(objCurso.nombreCurso,username);
@@ -147,8 +146,8 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
             //escenario=='ACTUALIZAR_CURSO'
             //Incremento version
             respNewCurso={
-                id:objCurso.idGlobal,
-                version:objCurso.versionGlobal+1,
+                id:validacion.idCurso,
+                version:validacion.versionCurso+1,
                 nombreCurso:objCurso.nombreCurso
             }
         }
@@ -157,7 +156,7 @@ app.post('/subirCurso', seguridad.autentico, async(req, res, next) => {
         //Actualizo nombre de usuario - OPCIONAL
         database.updateUserNombre(nombreAutor,username);
         //Grabo objeto Curso en FileSystem
-        let rutaFS=util.guardarArchivoCurso(objCurso);
+        let rutaFS=util.guardarArchivoCurso(objCurso,respNewCurso.id);
         //Actualizo rutaFS en BDAT
         let respUpdateCurso = await database.updateCurso(respNewCurso.id,rutaFS,respNewCurso.version,respNewCurso.nombreCurso);
         

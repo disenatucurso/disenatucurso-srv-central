@@ -68,20 +68,17 @@ function enviarEmail(asunto,body,destinatario) {
 // Función que valida en que escenario de subir curso estoy
 async function validarMetadataCurso(objCurso,username){
     try{
-        if (objCurso.idGlobal === null) {
-            return {
-                escenario:"NUEVO_CURSO",
-                versionCurso:null
-            }
-        }
-        else if(objCurso.institucion === constantes.SERVER_URL){
+        //Busco en la metadata del curso
+        let objSrvCentral = getObjServCentral(objCurso);
+        if(objSrvCentral != null){
             //Obtengo el curso con idCurso=idGlobal para conocer su creador
-            let resCurso = await database.getCurso(objCurso.idGlobal);
-            if(resCurso.username === username){
-                if(resCurso.version == objCurso.versionGlobal){
+            let dbCurso = await database.getCurso(objSrvCentral.idGlobal);
+            if(dbCurso.username === username){
+                if(dbCurso.version == objSrvCentral.versionGlobal){
                     return {
                         escenario:"ACTUALIZAR_CURSO",
-                        versionCurso:resCurso.version
+                        idCurso:objSrvCentral.idGlobal,
+                        versionCurso:dbCurso.version
                     }
                 }
                 throw new Error('Número de versión incorrecto');
@@ -89,15 +86,16 @@ async function validarMetadataCurso(objCurso,username){
             else{
                 return {
                     escenario:"NUEVO_CURSO_YAEXISTE",
-                    versionCurso:resCurso.version
+                    idCurso:null,
+                    versionCurso:dbCurso.version
                 }
             }
         }
-        else{
-            return {
-                escenario:"NUEVO_CURSO",
-                versionCurso:null
-            }
+        //Si no encontré metadata del curso, es un nuevo curso
+        return {
+            escenario:"NUEVO_CURSO",
+            idCurso:null,
+            versionCurso:null
         }
     }
     catch(error){
@@ -105,9 +103,8 @@ async function validarMetadataCurso(objCurso,username){
     }
 }
 // Escribe/sobreescribe archivo curso
-function guardarArchivoCurso(objCurso){
+function guardarArchivoCurso(objCurso,idCurso){
     try {
-        let idCurso=objCurso.idGlobal;
         let filePath = constantes.RUTA_FS_CURSO(idCurso);
         // Convertir el objeto JavaScript a una cadena JSON
         const jsonString = JSON.stringify(objCurso, null, 2);
@@ -130,9 +127,20 @@ function actualizarMetadataCurso(objCurso,idCurso,version,username){
             ultAutor.institucion = constantes.SERVER_URL;
         }
         //Actualizo metadata versionGlobal,idGlobal
-        objCurso.versionGlobal=version;
-        objCurso.idGlobal=idCurso;
-        objCurso.institucion=constantes.SERVER_URL;
+        let objServCentral = getObjServCentral(objCurso);;
+        if(objServCentral == null){
+            objServCentral = {
+                idGlobal: idCurso,
+  		        institucion: constantes.SERVER_URL,
+  		        versionGlobal: version
+            }
+            objCurso.servidorCentral.push(objServCentral);
+        }
+        else{
+            //Incremento version
+            objServCentral.versionGlobal=version;
+        }
+
         //Actualizo referencia interna
         const arrayRefInt = objCurso.referencias.internas;
         let ultRefInt = arrayRefInt[arrayRefInt.length - 1];
@@ -193,6 +201,15 @@ function leerArchivoSchema(idSchema){
     catch(error){
         throw error;
     }
+}
+
+function getObjServCentral(objCurso){
+    for(let objSrvCentral of objCurso.servidorCentral){
+        if(objSrvCentral.institucion == constantes.SERVER_URL){
+            return objSrvCentral;
+        }
+    }
+    return null;
 }
 
 export default { hashPassword
