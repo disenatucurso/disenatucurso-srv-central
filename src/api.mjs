@@ -21,7 +21,7 @@ app.post('/login', async (req, res, next) => {
                 username: username,
                 superadmin: superadmin
             };
-            const token = jsonwebtoken.sign(userInfo, constantes.ENCRYPT_KEY(), { expiresIn: '1h' });
+            const token = jsonwebtoken.sign(userInfo, constantes.ENCRYPT_KEY(), { expiresIn: '720h' });
             res.json({ token });
         }
         else{
