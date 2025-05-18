@@ -198,12 +198,12 @@ async function listCursos(criterio,usuarioLogueado) {
             query += " AND (UPPER(c.nombrecurso) LIKE $1 OR UPPER(u.nombre) LIKE $1 OR UPPER(u.username) LIKE $1)";
             values.push(addLikeString(upperCriterio)); // Añadimos el criterio en mayúsculas con el operador LIKE
         }
-        //Se quita filtro, todos los usuarios obtienen todos los cursos
-        /*if(!usuarioLogueado.superadmin){
+        //Código para obtener cursos creados por el usuario logueado
+        if(!usuarioLogueado.superadmin){
             const paramIndex = values.length + 1;
             query+=` AND c.username=$${paramIndex}`;
             values.push(usuarioLogueado.username);
-        }*/
+        }
         query += ";";
         const result = await client.query(query, values);
         return result.rows;

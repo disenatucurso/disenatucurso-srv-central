@@ -17,4 +17,4 @@ Para iniciar el servidor, desde un terminal ejecutar:
 node .\src\server.mjs
 
 Ruta a Swagger:
-http://localhost:3000/swagger-ui
+http://localhost:3000/api/swagger-ui

@@ -28,7 +28,7 @@ app.use(
 );
 
 // Montar Swagger
-app.use('/swagger-ui', swaggerRouter);
+app.use('/api/swagger-ui', swaggerRouter);
 // Montar la API
 app.use('/api', apiRouter);
 
